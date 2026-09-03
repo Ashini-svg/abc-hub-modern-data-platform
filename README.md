@@ -4,7 +4,7 @@ A PostgreSQL and Apache NiFi ETL project that transforms ABC Hub operational dat
 
 ## Project Overview
 
-ABC Hub is a combined digital streaming and physical media rental business. The operational database supports day-to-day transactions, but analytical reporting requires data from several business processes to be cleaned, integrated and aggregated.
+ABC Hub is a combined digital streaming and physical media rental business. Its operational database supports day-to-day transactions, but analytical reporting requires data from several business processes to be cleaned, integrated, enriched, and aggregated.
 
 This project builds an analytical data platform using PostgreSQL and Apache NiFi.
 
@@ -81,7 +81,6 @@ Validation confirmed zero duplicate rows at the defined grains of all three fact
 ├── nifi/
 │   └── ABC_Hub_ETL_Pipeline.json
 ├── sql/
-│   ├── operational_schema.sql
 │   ├── 00_create_database.sql
 │   ├── 01_analytical_schema.sql
 │   ├── nifi_processor_queries.sql
@@ -97,11 +96,47 @@ Validation confirmed zero duplicate rows at the defined grains of all three fact
 └── README.md
 ```
 
+## Source Data
+
+The ABC Hub operational dataset and operational database DDL were provided as part of the Zuu Crew course materials.
+
+Because those materials come from a private course package, they are **not redistributed in this public repository**.
+
+The public repository contains my implementation work, including:
+
+- the Apache NiFi flow definition
+- the analytical PostgreSQL schema
+- SQL used inside NiFi processors
+- validation queries
+- supporting Python script
+- execution and validation screenshots
+
+To reproduce the complete pipeline, the original ABC Hub operational source package must be available locally.
+
+## Running the Project
+
+1. Prepare and load the supplied ABC Hub operational PostgreSQL source database.
+2. Create the analytical database using:
+   - `sql/00_create_database.sql`
+3. Create the analytical schema using:
+   - `sql/01_analytical_schema.sql`
+4. Import:
+   - `nifi/ABC_Hub_ETL_Pipeline.json`
+5. Configure local PostgreSQL credentials and the PostgreSQL JDBC driver path in NiFi.
+6. Run the ETL pipeline.
+7. Execute:
+   - `sql/validation_queries.sql`
+   to verify the analytical results.
+
 ## Security
 
-No passwords, API keys, tokens or `.env` credentials are included in this repository. Environment-specific database credentials and JDBC paths must be configured locally.
+No passwords, API keys, tokens, `.env` files, or private credentials are included in this repository.
+
+Environment-specific database credentials and JDBC paths must be configured locally.
 
 ## Author
 
-Ashini Samarasinha  
-GitHub: Ashini-svg
+**Ashini Samarasinha**
+
+GitHub: [Ashini-svg](https://github.com/Ashini-svg)  
+LinkedIn: [Ashini Samarasingha](https://www.linkedin.com/in/ashini-samarasingha-a65432316/)
