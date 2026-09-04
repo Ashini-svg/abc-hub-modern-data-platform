@@ -457,6 +457,38 @@ ALTER TABLE ONLY analytics.fact_inventory_daily_utilisation
     ADD CONSTRAINT fk_inventory_utilisation_inventory FOREIGN KEY (inventory_key) REFERENCES analytics.dim_inventory(inventory_key);
 
 
+
+--
+-- ABC Hub: Populate conformed date dimension
+-- Date range: 2025-01-01 through 2026-12-31 (730 calendar days)
+-- Safe to re-run because existing date_key values are skipped.
+--
+
+INSERT INTO analytics.dim_date (
+    date_key,
+    full_date,
+    day_of_month,
+    month_number,
+    month_name,
+    quarter_number,
+    year_number
+)
+SELECT
+    TO_CHAR(d::date, 'YYYYMMDD')::integer AS date_key,
+    d::date AS full_date,
+    EXTRACT(DAY FROM d)::integer AS day_of_month,
+    EXTRACT(MONTH FROM d)::integer AS month_number,
+    TO_CHAR(d, 'FMMonth') AS month_name,
+    EXTRACT(QUARTER FROM d)::integer AS quarter_number,
+    EXTRACT(YEAR FROM d)::integer AS year_number
+FROM generate_series(
+    DATE '2025-01-01',
+    DATE '2026-12-31',
+    INTERVAL '1 day'
+) AS g(d)
+ON CONFLICT (date_key) DO NOTHING;
+
+
 --
 -- PostgreSQL database dump complete
 --
